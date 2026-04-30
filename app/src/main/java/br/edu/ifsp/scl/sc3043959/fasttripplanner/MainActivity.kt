@@ -1,5 +1,6 @@
 package br.edu.ifsp.scl.sc3043959.fasttripplanner
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -98,8 +99,14 @@ fun Tela1DadosViagem() {
                 val orcamentoDouble = orcamento.toDoubleOrNull()
 
                 if (destino.isNotBlank() && diasInt != null && diasInt > 0 && orcamentoDouble != null && orcamentoDouble > 0) {
-                    // TODO: navegação via INTENT para a tela 2
-                    Toast.makeText(context, "Dados validados! Pronto para avançar.", Toast.LENGTH_SHORT).show()
+
+                    // cria um Intent para iniciar a OpcoesViagemActivity, passando os dados como extras
+                    val intent = Intent(context, OpcoesViagemActivity::class.java).apply {
+                        putExtra("destino", destino)
+                        putExtra("dias", diasInt)
+                        putExtra("orcamento", orcamentoDouble)
+                    }
+                    context.startActivity(intent)
                 } else {
                     Toast.makeText(context, "Por favor, preencha todos os campos com valores válidos.", Toast.LENGTH_SHORT).show()
                 }
