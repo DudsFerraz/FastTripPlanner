@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -68,12 +69,13 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
+                    .clickable { hospedagemSelecionada = opcao } // torna a linha inteira clicavel
+                    .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
                     selected = (opcao == hospedagemSelecionada),
-                    onClick = { hospedagemSelecionada = opcao }
+                    onClick = null // click delegado para a Row
                 )
                 Text(text = opcao, modifier = Modifier.padding(start = 8.dp))
             }
@@ -83,18 +85,9 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
 
         // secao de servicos adicionais
         Text(text = "Serviços Adicionais", style = MaterialTheme.typography.titleMedium)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = transporte, onCheckedChange = { transporte = it })
-            Text("Transporte (+ R$ 300)")
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = alimentacao, onCheckedChange = { alimentacao = it })
-            Text("Alimentação (+ R$ 50/dia)")
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = passeios, onCheckedChange = { passeios = it })
-            Text("Passeios (+ R$ 120/dia)")
-        }
+        ServicoExtraCheckbox("Transporte (+ R$ 300)", transporte) { transporte = it }
+        ServicoExtraCheckbox("Alimentação (+ R$ 50/dia)", alimentacao) { alimentacao = it }
+        ServicoExtraCheckbox("Passeios (+ R$ 120/dia)", passeios) { passeios = it }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -132,3 +125,20 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
     }
 }
 
+// Componente customizado para evitar repeticao de codigo (DRY)
+@Composable
+private fun ServicoExtraCheckbox(texto: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onCheckedChange(!checked) } // torna a linha inteira clicavel
+            .padding(vertical = 8.dp), // margem aumentada para melhorar a area de touch
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = null // click delegado para a Row
+        )
+        Text(text = texto, modifier = Modifier.padding(start = 8.dp))
+    }
+}
