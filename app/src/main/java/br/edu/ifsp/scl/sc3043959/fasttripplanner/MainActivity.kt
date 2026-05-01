@@ -96,7 +96,7 @@ fun Tela1DadosViagem() {
         Button(
             onClick = {
                 val diasInt = dias.toIntOrNull()
-                val orcamentoDouble = orcamento.toDoubleOrNull()
+                val orcamentoDouble = orcamento.replace(",", ".").toDoubleOrNull()
 
                 if (destino.isNotBlank() && diasInt != null && diasInt > 0 && orcamentoDouble != null && orcamentoDouble > 0) {
 
