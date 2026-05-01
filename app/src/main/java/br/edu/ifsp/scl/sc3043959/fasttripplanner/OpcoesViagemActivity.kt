@@ -18,9 +18,9 @@ class OpcoesViagemActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // recebe os parametros passados pela intent da Activity origem
-        val destino = intent.getStringExtra("DESTINO") ?: ""
-        val dias = intent.getIntExtra("DIAS", 0)
-        val orcamento = intent.getDoubleExtra("ORCAMENTO", 0.0)
+        val destino = intent.getStringExtra(Constants.EXTRA_DESTINO) ?: ""
+        val dias = intent.getIntExtra(Constants.EXTRA_DIAS, 0)
+        val orcamento = intent.getDoubleExtra(Constants.EXTRA_ORCAMENTO, 0.0)
 
         setContent {
             MaterialTheme {
@@ -114,13 +114,13 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
             Button(
                 onClick = {
                     val intent = Intent(context, ResumoViagemActivity::class.java).apply {
-                        putExtra("DESTINO", destino)
-                        putExtra("DIAS", dias)
-                        putExtra("ORCAMENTO", orcamento)
-                        putExtra("HOSPEDAGEM", hospedagemSelecionada)
-                        putExtra("TRANSPORTE", transporte)
-                        putExtra("ALIMENTACAO", alimentacao)
-                        putExtra("PASSEIOS", passeios)
+                        putExtra(Constants.EXTRA_DESTINO, destino)
+                        putExtra(Constants.EXTRA_DIAS, dias)
+                        putExtra(Constants.EXTRA_ORCAMENTO, orcamento)
+                        putExtra(Constants.EXTRA_HOSPEDAGEM, hospedagemSelecionada)
+                        putExtra(Constants.EXTRA_TRANSPORTE, transporte)
+                        putExtra(Constants.EXTRA_ALIMENTACAO, alimentacao)
+                        putExtra(Constants.EXTRA_PASSEIOS, passeios)
                     }
                     context.startActivity(intent)
                 },

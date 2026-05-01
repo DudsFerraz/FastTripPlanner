@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -17,13 +16,13 @@ class ResumoViagemActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // recupera todos os dados passados pelas intents anteriores
-        val destino = intent.getStringExtra("DESTINO") ?: ""
-        val dias = intent.getIntExtra("DIAS", 0)
-        val orcamento = intent.getDoubleExtra("ORCAMENTO", 0.0)
-        val hospedagem = intent.getStringExtra("HOSPEDAGEM") ?: "Econômica"
-        val transporte = intent.getBooleanExtra("TRANSPORTE", false)
-        val alimentacao = intent.getBooleanExtra("ALIMENTACAO", false)
-        val passeios = intent.getBooleanExtra("PASSEIOS", false)
+        val destino = intent.getStringExtra(Constants.EXTRA_DESTINO) ?: ""
+        val dias = intent.getIntExtra(Constants.EXTRA_DIAS, 0)
+        val orcamento = intent.getDoubleExtra(Constants.EXTRA_ORCAMENTO, 0.0)
+        val hospedagem = intent.getStringExtra(Constants.EXTRA_HOSPEDAGEM) ?: "Econômica"
+        val transporte = intent.getBooleanExtra(Constants.EXTRA_TRANSPORTE, false)
+        val alimentacao = intent.getBooleanExtra(Constants.EXTRA_ALIMENTACAO, false)
+        val passeios = intent.getBooleanExtra(Constants.EXTRA_PASSEIOS, false)
 
         setContent {
             MaterialTheme {
