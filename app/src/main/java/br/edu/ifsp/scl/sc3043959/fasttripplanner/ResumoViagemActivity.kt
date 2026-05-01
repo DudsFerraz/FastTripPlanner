@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
+import java.util.Locale
 
 class ResumoViagemActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +68,9 @@ fun Tela3ResumoViagem(
 
     val custoTotal = (custoBase * multiplicador) + totalExtras
 
+    // Formatador de moeda padrao Brasil (pt-BR)
+    val formatadorMoeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"))
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,10 +81,10 @@ fun Tela3ResumoViagem(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // exibe os dados consolidados
+        // exibe os dados consolidados formatados
         Text(text = "Destino: $destino")
         Text(text = "Dias: $dias")
-        Text(text = "Orçamento Diário: R$ $orcamento")
+        Text(text = "Orçamento Diário: ${formatadorMoeda.format(orcamento)}")
         Text(text = "Hospedagem: $hospedagem")
 
         Text(text = "Serviços Contratados:")
@@ -90,10 +95,9 @@ fun Tela3ResumoViagem(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // exibe valor final em destaque
-        val totalFormatado = String.format("%.2f", custoTotal)
+        // exibe valor final formatado corretamente
         Text(
-            text = "Total Estimado: R$$totalFormatado",
+            text = "Total Estimado: ${formatadorMoeda.format(custoTotal)}",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary
         )
