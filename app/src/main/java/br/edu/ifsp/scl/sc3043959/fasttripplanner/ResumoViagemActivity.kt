@@ -1,0 +1,118 @@
+package br.edu.ifsp.scl.sc3043959.fasttripplanner
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+
+class ResumoViagemActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // recupera todos os dados passados pelas intents anteriores
+        val destino = intent.getStringExtra("DESTINO") ?: ""
+        val dias = intent.getIntExtra("DIAS", 0)
+        val orcamento = intent.getDoubleExtra("ORCAMENTO", 0.0)
+        val hospedagem = intent.getStringExtra("HOSPEDAGEM") ?: "Econômica"
+        val transporte = intent.getBooleanExtra("TRANSPORTE", false)
+        val alimentacao = intent.getBooleanExtra("ALIMENTACAO", false)
+        val passeios = intent.getBooleanExtra("PASSEIOS", false)
+
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Tela3ResumoViagem(
+                        destino = destino,
+                        dias = dias,
+                        orcamento = orcamento,
+                        hospedagem = hospedagem,
+                        transporte = transporte,
+                        alimentacao = alimentacao,
+                        passeios = passeios
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Tela3ResumoViagem(
+    destino: String, dias: Int, orcamento: Double, hospedagem: String,
+    transporte: Boolean, alimentacao: Boolean, passeios: Boolean
+) {
+    val context = LocalContext.current
+
+    val custoBase = dias * orcamento
+
+    // define multiplicador baseado na escolha da hospedagem
+    val multiplicador = when (hospedagem) {
+        "Conforto" -> 1.5
+        "Luxo" -> 2.2
+        else -> 1.0 // Econômica
+    }
+
+    // calcula extras somando valores fixos e diários
+    var totalExtras = 0.0
+    if (transporte) totalExtras += 300.0
+    if (alimentacao) totalExtras += (50.0 * dias)
+    if (passeios) totalExtras += (120.0 * dias)
+
+    val custoTotal = (custoBase * multiplicador) + totalExtras
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Resumo da Viagem", style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // exibe os dados consolidados
+        Text(text = "Destino: $destino")
+        Text(text = "Dias: $dias")
+        Text(text = "Orçamento Diário: R$ $orcamento")
+        Text(text = "Hospedagem: $hospedagem")
+
+        Text(text = "Serviços Contratados:")
+        if (transporte) Text(text = "- Transporte")
+        if (alimentacao) Text(text = "- Alimentação")
+        if (passeios) Text(text = "- Passeios")
+        if (!transporte && !alimentacao && !passeios) Text(text = "- Nenhum")
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // exibe valor final em destaque
+        val totalFormatado = String.format("%.2f", custoTotal)
+        Text(
+            text = "Total Estimado: R$$totalFormatado",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // botao reiniciar volta para a tela inicial
+        Button(
+            onClick = {
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    // flags limpam a pilha de navegação, impedindo que o botao "voltar" do android retorne a esta tela
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Reiniciar Planejamento")
+        }
+    }
+}

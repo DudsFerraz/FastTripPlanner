@@ -102,9 +102,9 @@ fun Tela1DadosViagem() {
 
                     // cria um Intent para iniciar a OpcoesViagemActivity, passando os dados como extras
                     val intent = Intent(context, OpcoesViagemActivity::class.java).apply {
-                        putExtra("destino", destino)
-                        putExtra("dias", diasInt)
-                        putExtra("orcamento", orcamentoDouble)
+                        putExtra("DESTINO", destino)
+                        putExtra("DIAS", diasInt)
+                        putExtra("ORCAMENTO", orcamentoDouble)
                     }
                     context.startActivity(intent)
                 } else {

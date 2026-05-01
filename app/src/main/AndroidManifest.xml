@@ -24,6 +24,8 @@
         </activity>
 
         <activity android:name=".OpcoesViagemActivity" />
+
+        <activity android:name=".ResumoViagemActivity" />
     </application>
 
 </manifest>

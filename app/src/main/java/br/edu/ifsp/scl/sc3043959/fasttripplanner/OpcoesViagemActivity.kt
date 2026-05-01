@@ -113,7 +113,16 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
             // botao calcular
             Button(
                 onClick = {
-                    // TODO: implementacao da Intent para a Tela 3 no proximo commit
+                    val intent = Intent(context, ResumoViagemActivity::class.java).apply {
+                        putExtra("DESTINO", destino)
+                        putExtra("DIAS", dias)
+                        putExtra("ORCAMENTO", orcamento)
+                        putExtra("HOSPEDAGEM", hospedagemSelecionada)
+                        putExtra("TRANSPORTE", transporte)
+                        putExtra("ALIMENTACAO", alimentacao)
+                        putExtra("PASSEIOS", passeios)
+                    }
+                    context.startActivity(intent)
                 },
                 modifier = Modifier.weight(1f)
             ) {
