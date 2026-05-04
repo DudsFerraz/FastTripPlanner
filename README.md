@@ -22,6 +22,6 @@ Além dos requisitos básicos da especificação, este projeto conta com:
 *   **Single Source of Truth:** Utilização de um *Object* `Constants` para centralizar as chaves de Intents, evitando *magic strings* e prevenindo bugs em tempo de compilação.
 *   **Princípio DRY (Don't Repeat Yourself):** Extração de componentes de interface repetitivos para funções `@Composable` privadas e reutilizáveis.
 
-## 👨‍💻 Autor
+## 🎥 Demonstração
 
-Eduardo Oliveira Ferraz de Campos
+./docs/FastTripPlannerDemo.mp4
