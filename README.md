@@ -24,4 +24,6 @@ Além dos requisitos básicos da especificação, este projeto conta com:
 
 ## 🎥 Demonstração
 
-![Demonstração do FastTripPlanner](./docs/FastTripPlannerDemo.mp4)
+https://github.com/user-attachments/assets/c0754722-000f-4041-acdb-6e0143ec333e
+
+
