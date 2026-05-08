@@ -8,4 +8,5 @@ object Constants {
     const val EXTRA_TRANSPORTE = "extra_transporte"
     const val EXTRA_ALIMENTACAO = "extra_alimentacao"
     const val EXTRA_PASSEIOS = "extra_passeios"
+    const val EXTRA_MODO_ECONOMICO = "extra_modo_economico"
 }

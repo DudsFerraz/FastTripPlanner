@@ -25,6 +25,7 @@ class ResumoViagemActivity : ComponentActivity() {
         val transporte = intent.getBooleanExtra(Constants.EXTRA_TRANSPORTE, false)
         val alimentacao = intent.getBooleanExtra(Constants.EXTRA_ALIMENTACAO, false)
         val passeios = intent.getBooleanExtra(Constants.EXTRA_PASSEIOS, false)
+        val modoEconomico = intent.getBooleanExtra(Constants.EXTRA_MODO_ECONOMICO, false)
 
         setContent {
             MaterialTheme {
@@ -36,7 +37,8 @@ class ResumoViagemActivity : ComponentActivity() {
                         hospedagem = hospedagem,
                         transporte = transporte,
                         alimentacao = alimentacao,
-                        passeios = passeios
+                        passeios = passeios,
+                        modoEconomico = modoEconomico
                     )
                 }
             }
@@ -47,11 +49,14 @@ class ResumoViagemActivity : ComponentActivity() {
 @Composable
 fun Tela3ResumoViagem(
     destino: String, dias: Int, orcamento: Double, hospedagem: String,
-    transporte: Boolean, alimentacao: Boolean, passeios: Boolean
+    transporte: Boolean, alimentacao: Boolean, passeios: Boolean, modoEconomico: Boolean
 ) {
     val context = LocalContext.current
 
-    val custoBase = dias * orcamento
+    var orcamentoInteligente = orcamento
+    if (modoEconomico) orcamentoInteligente *= 0.85
+
+    val custoBase = dias * orcamentoInteligente
 
     // define multiplicador baseado na escolha da hospedagem
     val multiplicador = when (hospedagem) {

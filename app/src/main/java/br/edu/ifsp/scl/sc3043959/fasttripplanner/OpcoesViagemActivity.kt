@@ -44,13 +44,15 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
     val context = LocalContext.current
 
     // estado para armazenar a escolha de hospedagem
-    val opcoesHospedagem = listOf("Econômica", "Conforto", "Luxo")
-    var hospedagemSelecionada by rememberSaveable { mutableStateOf(opcoesHospedagem[0]) }
+    var opcoesHospedagem by rememberSaveable { mutableStateOf(listOf("Econômica", "Conforto", "Luxo")) }
+    var hospedagemSelecionada by rememberSaveable { mutableStateOf("Econômica") }
 
     // estados para armazenar a selecao de servicos extras
     var transporte by rememberSaveable { mutableStateOf(false) }
     var alimentacao by rememberSaveable { mutableStateOf(false) }
     var passeios by rememberSaveable { mutableStateOf(false) }
+
+    var modoEconomico by rememberSaveable { mutableStateOf(false) }
 
     // Column organiza os elementos na vertical
     Column(
@@ -63,19 +65,45 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        //Modo economico
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { modoEconomico = !modoEconomico }
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = modoEconomico,
+                onCheckedChange = {
+                    modoEconomico = it
+                    if (modoEconomico) {
+                        passeios = false
+                        hospedagemSelecionada = "Econômica"
+                        opcoesHospedagem = listOf("Econômica")
+                    } else {
+                        opcoesHospedagem = listOf("Econômica", "Conforto", "Luxo")
+                    }
+                }
+            )
+            Text(text = "Modo econômico", modifier = Modifier.padding(start = 8.dp))
+        }
+
+
         // secao de hospedagem
         Text(text = "Hospedagem", style = MaterialTheme.typography.titleMedium)
         opcoesHospedagem.forEach { opcao ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { hospedagemSelecionada = opcao } // torna a linha inteira clicavel
+                    .clickable(enabled = !modoEconomico || opcao == "Econômica") { hospedagemSelecionada = opcao } // torna a linha inteira clicavel
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
                     selected = (opcao == hospedagemSelecionada),
-                    onClick = null // click delegado para a Row
+                    onClick = null, // click delegado para a Row
+                    enabled = !modoEconomico || opcao == "Econômica"
                 )
                 Text(text = opcao, modifier = Modifier.padding(start = 8.dp))
             }
@@ -85,9 +113,9 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
 
         // secao de servicos adicionais
         Text(text = "Serviços Adicionais", style = MaterialTheme.typography.titleMedium)
-        ServicoExtraCheckbox("Transporte (+ R$ 300)", transporte) { transporte = it }
-        ServicoExtraCheckbox("Alimentação (+ R$ 50/dia)", alimentacao) { alimentacao = it }
-        ServicoExtraCheckbox("Passeios (+ R$ 120/dia)", passeios) { passeios = it }
+        ServicoExtraCheckbox("Transporte (+ R$ 300)", transporte, enabled = true) { transporte = it }
+        ServicoExtraCheckbox("Alimentação (+ R$ 50/dia)", alimentacao, enabled = true) { alimentacao = it }
+        ServicoExtraCheckbox("Passeios (+ R$ 120/dia)", passeios, enabled = !modoEconomico) { passeios = it }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -114,6 +142,7 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
                         putExtra(Constants.EXTRA_TRANSPORTE, transporte)
                         putExtra(Constants.EXTRA_ALIMENTACAO, alimentacao)
                         putExtra(Constants.EXTRA_PASSEIOS, passeios)
+                        putExtra(Constants.EXTRA_MODO_ECONOMICO, modoEconomico)
                     }
                     context.startActivity(intent)
                 },
@@ -127,17 +156,18 @@ fun Tela2OpcoesViagem(destino: String, dias: Int, orcamento: Double, onVoltar: (
 
 // Componente customizado para evitar repeticao de codigo (DRY)
 @Composable
-private fun ServicoExtraCheckbox(texto: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+private fun ServicoExtraCheckbox(texto: String, checked: Boolean, enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) } // torna a linha inteira clicavel
+            .clickable(enabled = enabled) { onCheckedChange(!checked) } // torna a linha inteira clicavel
             .padding(vertical = 8.dp), // margem aumentada para melhorar a area de touch
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
             checked = checked,
-            onCheckedChange = null // click delegado para a Row
+            onCheckedChange = null, // click delegado para a Row
+            enabled = enabled
         )
         Text(text = texto, modifier = Modifier.padding(start = 8.dp))
     }
